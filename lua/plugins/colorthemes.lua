@@ -1,7 +1,11 @@
 return {
-  { 'shaunsingh/nord.nvim', enabled = false, lazy = false, priority = 1000 },
-  { 'folke/tokyonight.nvim', enabled = false, lazy = false, priority = 1000 },
-  { 'EdenEast/nightfox.nvim', enabled = false, lazy = false, priority = 1000 },
+  { 
+    'shaunsingh/nord.nvim', 
+    enabled = false, lazy = false, priority = 1000,
+    config = function()
+      vim.cmd.colorscheme "nord"
+    end,
+   },
   {
     'catppuccin/nvim',
     name = 'catppuccin',
@@ -10,8 +14,8 @@ return {
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
       -- set colorscheme and overwrite highlights
-      vim.cmd.colorscheme 'catppuccin-mocha'
-      local colors = require 'catppuccin.palettes.mocha'
+      vim.cmd.colorscheme 'catppuccin-macchiato'
+      local colors = require 'catppuccin.palettes.macchiato'
       vim.api.nvim_set_hl(0, 'Tabline', { fg = colors.green, bg = colors.mantle })
       vim.api.nvim_set_hl(0, 'TermCursor', { fg = '#A6E3A1', bg = '#A6E3A1' })
     end,
@@ -32,7 +36,7 @@ return {
 
   {
     'rebelot/kanagawa.nvim',
-    enabled = true,
+    enabled = false,
     lazy = false,
     priority = 1000,
     config = function()
@@ -51,12 +55,28 @@ return {
       vim.api.nvim_set_hl(0, 'TermCursor', { fg = '#A6E3A1', bg = '#A6E3A1' })
     end,
   },
+  {
+    'projekt0n/github-nvim-theme',
+    name = 'github-theme',
+    enabled = true,
+    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+    require('github-theme').setup({
+      -- ...
+    })
 
+    vim.cmd('colorscheme github_dark_dimmed')
+    end,
+  },
   {
     'olimorris/onedarkpro.nvim',
-    enabled = false,
+    enabled = true,
     lazy = false,
     priority = 1000,
+    config = function()
+      vim.cmd("colorscheme onedark_vivid")
+    end,
   },
 
   {

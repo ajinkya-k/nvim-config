@@ -109,6 +109,17 @@ return {
     end,
   },
 
+  {
+    "kelly-lin/telescope-ag",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+    config = function() 
+      local telescope_ag = require 'telescope-ag'
+      telescope_ag.setup {
+      cmd = telescope_ag.cmds.rg, -- defaults to telescope_ag.cmds.ag
+      }
+    end,
+  },
+
   { -- Highlight todo, notes, etc in comments
     'folke/todo-comments.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
@@ -138,7 +149,7 @@ return {
   { -- statusline
     -- PERF: I found this to slow down the editor
     'nvim-lualine/lualine.nvim',
-    enabled = false,
+    enabled = true,
     config = function()
       local function macro_recording()
         local reg = vim.fn.reg_recording()
@@ -153,13 +164,13 @@ return {
         options = {
           section_separators = '',
           component_separators = '',
-          globalstatus = true,
+          globalstatus = true
         },
         sections = {
           lualine_a = { 'mode', macro_recording },
-          lualine_b = { 'branch', 'diff', 'diagnostics' },
+          lualine_b = { 'branch', 'diff', 'diagnostics'},
           -- lualine_b = {},
-          lualine_c = { 'searchcount' },
+          lualine_c = {  'filename', 'searchcount' },
           lualine_x = { 'filetype' },
           lualine_y = { 'progress' },
           lualine_z = { 'location' },
@@ -372,6 +383,7 @@ return {
       local image = require 'image'
       image.setup {
         backend = 'kitty',
+        processor = "magick_cli",
         integrations = {
           markdown = {
             enabled = true,
@@ -449,5 +461,20 @@ return {
 
       vim.keymap.set('n', '<leader>ic', clear_all_images, { desc = 'image [c]lear' })
     end,
+  },
+  {
+  "folke/noice.nvim",
+  event = "VeryLazy",
+  opts = {
+    -- add any options here
+  },
+  dependencies = {
+    -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+    "MunifTanjim/nui.nvim",
+    -- OPTIONAL:
+    --   `nvim-notify` is only needed, if you want to use the notification view.
+    --   If not available, we use `mini` as the fallback
+    "rcarriga/nvim-notify",
+    }
   },
 }

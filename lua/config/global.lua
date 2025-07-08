@@ -52,6 +52,8 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- consistent number column
 vim.opt.signcolumn = 'yes:1'
+vim.wo.number = true
+vim.wo.relativenumber = true
 
 -- how to show autocomplete menu
 vim.opt.completeopt = 'menuone,noinsert'
