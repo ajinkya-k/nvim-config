@@ -50,7 +50,6 @@ return {
     },
     config = function()
       local capabilities = require('blink.cmp').get_lsp_capabilities()
-      local lspconfig = require 'lspconfig'
       local util = require 'lspconfig.util'
 
       require('mason').setup()
@@ -68,7 +67,7 @@ return {
         },
       }
 
-      lspconfig['lua_ls'].setup { capabilities = capabilities }
+      vim.lsp.config('lua_ls', { capabilities = capabilities })
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -123,13 +122,13 @@ return {
       -- $home/.config/marksman/config.toml :
       -- [core]
       -- markdown.file_extensions = ["md", "markdown", "qmd"]
-      lspconfig.marksman.setup {
+      vim.lsp.config('marksman', {
         capabilities = capabilities,
         filetypes = { 'markdown', 'quarto' },
         root_dir = util.root_pattern('.git', '.marksman.toml', '_quarto.yml'),
-      }
+      })
 
-      lspconfig.r_language_server.setup {
+      vim.lsp.config('r_language_server', {
         capabilities = capabilities,
         flags = lsp_flags,
         settings = {
@@ -139,24 +138,24 @@ return {
             },
           },
         },
-      }
+      })
 
-      lspconfig.cssls.setup {
+      vim.lsp.config('cssls', {
         capabilities = capabilities,
         flags = lsp_flags,
-      }
+      })
 
-      lspconfig.html.setup {
+      vim.lsp.config('html', {
         capabilities = capabilities,
         flags = lsp_flags,
-      }
+      })
 
-      lspconfig.emmet_language_server.setup {
+      vim.lsp.config('emmet_language_server', {
         capabilities = capabilities,
         flags = lsp_flags,
-      }
+      })
 
-      lspconfig.yamlls.setup {
+      vim.lsp.config('yamlls', {
         capabilities = capabilities,
         flags = lsp_flags,
         settings = {
@@ -167,14 +166,14 @@ return {
             },
           },
         },
-      }
+      })
 
-      lspconfig.jsonls.setup {
+      vim.lsp.config('jsonls', {
         capabilities = capabilities,
         flags = lsp_flags,
-      }
+      })
 
-      lspconfig.zls.setup {
+      vim.lsp.config('zls', {
         -- Server-specific settings. See `:help lspconfig-setup`
 
         -- omit the following line if `zls` is in your PATH
@@ -200,18 +199,18 @@ return {
             zig_exe_path = '/path/to/zig_executable',
           },
         },
-      }
+      })
 
-      lspconfig.dotls.setup {
+      vim.lsp.config('dotls', {
         capabilities = capabilities,
         flags = lsp_flags,
-      }
+      })
 
-      lspconfig.ts_ls.setup {
+      vim.lsp.config('ts_ls', {
         capabilities = capabilities,
         flags = lsp_flags,
         filetypes = { 'js', 'javascript', 'typescript', 'ojs' },
-      }
+      })
 
       local function get_quarto_resource_path()
         local function strsplit(s, delimiter)
@@ -238,7 +237,7 @@ return {
         table.insert(lua_plugin_paths, resource_path .. '/lua-plugin/plugin.lua')
       end
 
-      lspconfig.lua_ls.setup {
+      vim.lsp.config('lua_ls', {
         capabilities = capabilities,
         flags = lsp_flags,
         settings = {
@@ -265,23 +264,23 @@ return {
             },
           },
         },
-      }
+      })
 
-      lspconfig.vimls.setup {
+      vim.lsp.config('vimls', {
         capabilities = capabilities,
         flags = lsp_flags,
-      }
+      })
 
-      lspconfig.julials.setup {
+      vim.lsp.config('julials', {
         capabilities = capabilities,
         flags = lsp_flags,
-      }
+      })
 
-      lspconfig.bashls.setup {
+      vim.lsp.config('bashls', {
         capabilities = capabilities,
         flags = lsp_flags,
         filetypes = { 'sh', 'bash' },
-      }
+      })
 
       -- Add additional languages here.
       -- See `:h lspconfig-all` for the configuration.
@@ -296,7 +295,7 @@ return {
       --   flags = lsp_flags,
       -- }
 
-      lspconfig.rust_analyzer.setup {
+      vim.lsp.config('rust_analyzer', {
         capabilities = capabilities,
         settings = {
           ['rust-analyzer'] = {
@@ -305,7 +304,7 @@ return {
             },
           },
         },
-      }
+      })
 
       -- lspconfig.ruff_lsp.setup {
       --   capabilities = capabilities,
@@ -322,7 +321,7 @@ return {
       end
       capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
 
-      lspconfig.pyright.setup {
+      vim.lsp.config('basedpyright', {
         capabilities = capabilities,
         flags = lsp_flags,
         settings = {
@@ -337,7 +336,7 @@ return {
         root_dir = function(fname)
           return util.root_pattern('.git', 'setup.py', 'setup.cfg', 'pyproject.toml', 'requirements.txt')(fname) or util.path.dirname(fname)
         end,
-      }
+      })
     end,
   },
 }
