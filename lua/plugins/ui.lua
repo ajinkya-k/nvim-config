@@ -19,6 +19,7 @@ return {
         end,
       },
     },
+    enabled = false,
     config = function()
       local telescope = require 'telescope'
       local actions = require 'telescope.actions'
@@ -26,7 +27,7 @@ return {
       local new_maker = function(filepath, bufnr, opts)
         opts = opts or {}
         filepath = vim.fn.expand(filepath)
-        vim.loop.fs_stat(filepath, function(_, stat)
+        vim.uv.fs_stat(filepath, function(_, stat)
           if not stat then
             return
           end
@@ -95,10 +96,10 @@ return {
             require('telescope.themes').get_dropdown(),
           },
           fzf = {
-            fuzzy = true,                   -- false will only do exact matching
+            fuzzy = true, -- false will only do exact matching
             override_generic_sorter = true, -- override the generic sorter
-            override_file_sorter = true,    -- override the file sorter
-            case_mode = 'smart_case',       -- or "ignore_case" or "respect_case"
+            override_file_sorter = true, -- override the file sorter
+            case_mode = 'smart_case', -- or "ignore_case" or "respect_case"
           },
         },
       }
@@ -110,12 +111,13 @@ return {
   },
 
   {
-    "kelly-lin/telescope-ag",
-    dependencies = { "nvim-telescope/telescope.nvim" },
-    config = function() 
+    'kelly-lin/telescope-ag',
+    enabled = false,
+    dependencies = { 'nvim-telescope/telescope.nvim' },
+    config = function()
       local telescope_ag = require 'telescope-ag'
       telescope_ag.setup {
-      cmd = telescope_ag.cmds.rg, -- defaults to telescope_ag.cmds.ag
+        cmd = telescope_ag.cmds.rg, -- defaults to telescope_ag.cmds.ag
       }
     end,
   },
@@ -140,7 +142,7 @@ return {
     },
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     keys = {
-      { '-',          ':Oil<cr>', desc = 'oil' },
+      { '-', ':Oil<cr>', desc = 'oil' },
       { '<leader>ef', ':Oil<cr>', desc = 'edit [f]iles' },
     },
     cmd = 'Oil',
@@ -164,13 +166,13 @@ return {
         options = {
           section_separators = '',
           component_separators = '',
-          globalstatus = true
+          globalstatus = true,
         },
         sections = {
           lualine_a = { 'mode', macro_recording },
-          lualine_b = { 'branch', 'diff', 'diagnostics'},
+          lualine_b = { 'branch', 'diff', 'diagnostics' },
           -- lualine_b = {},
-          lualine_c = {  'filename', 'searchcount' },
+          lualine_c = { 'filename', 'searchcount' },
           lualine_x = { 'filetype' },
           lualine_y = { 'progress' },
           lualine_z = { 'location' },
@@ -182,7 +184,7 @@ return {
 
   { -- nicer-looking tabs with close icons
     'nanozuki/tabby.nvim',
-    enabled = false,
+    enabled = true ,
     config = function()
       require('tabby.tabline').use_preset 'tab_only'
     end,
@@ -202,33 +204,33 @@ return {
   },
 
   {
-    "NStefan002/screenkey.nvim",
+    'NStefan002/screenkey.nvim',
     lazy = false,
   },
 
-  { -- filetree
-    'nvim-tree/nvim-tree.lua',
-    enabled = true,
-    keys = {
-      { '<c-b>', ':NvimTreeToggle<cr>', desc = 'toggle nvim-tree' },
-    },
-    config = function()
-      require('nvim-tree').setup {
-        disable_netrw = true,
-        update_focused_file = {
-          enable = true,
-        },
-        git = {
-          enable = true,
-          ignore = false,
-          timeout = 500,
-        },
-        diagnostics = {
-          enable = true,
-        },
-      }
-    end,
-  },
+  -- { -- filetree
+  --   'nvim-tree/nvim-tree.lua',
+  --   enabled = true,
+  --   keys = {
+  --     { '<c-b>', ':NvimTreeToggle<cr>', desc = 'toggle nvim-tree' },
+  --   },
+  --   config = function()
+  --     require('nvim-tree').setup {
+  --       disable_netrw = true,
+  --       update_focused_file = {
+  --         enable = true,
+  --       },
+  --       git = {
+  --         enable = true,
+  --         ignore = false,
+  --         timeout = 500,
+  --       },
+  --       diagnostics = {
+  --         enable = true,
+  --       },
+  --     }
+  --   end,
+  -- },
 
   -- or a different filetree
   {
@@ -251,7 +253,7 @@ return {
     'folke/which-key.nvim',
     enabled = true,
     config = function()
-      require('which-key').setup {}
+      require('which-key').setup()
       require 'config.keymap'
     end,
   },
@@ -264,7 +266,7 @@ return {
     },
     opts = {
       providers = {
-        priority = { 'markdown', 'lsp',  'norg' },
+        priority = { 'markdown', 'lsp', 'norg' },
         -- Configuration for each provider (3rd party providers are supported)
         lsp = {
           -- Lsp client names to ignore
@@ -364,10 +366,10 @@ return {
     ft = { 'markdown', 'quarto', 'vimwiki' },
     cond = function()
       -- Disable on Windows system
-       return vim.fn.has 'win32' ~= 1 
+      return vim.fn.has 'win32' ~= 1
     end,
     dependencies = {
-       'leafo/magick', -- that's a lua rock
+      'leafo/magick', -- that's a lua rock
     },
     config = function()
       -- Requirements
@@ -383,7 +385,7 @@ return {
       local image = require 'image'
       image.setup {
         backend = 'kitty',
-        processor = "magick_cli",
+        processor = 'magick_cli',
         integrations = {
           markdown = {
             enabled = true,
@@ -463,18 +465,240 @@ return {
     end,
   },
   {
-  "folke/noice.nvim",
-  event = "VeryLazy",
-  opts = {
-    -- add any options here
+    'folke/noice.nvim',
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      'MunifTanjim/nui.nvim',
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      'rcarriga/nvim-notify',
+    },
+    event = 'VeryLazy',
+    opts = {},
+    config = function()
+      require('noice').setup {
+        views = {
+          cmdline_popup = {
+            position = {
+              row = 5,
+              col = '50%',
+            },
+            size = {
+              width = 60,
+              height = 'auto',
+            },
+          },
+          popupmenu = {
+            enabled = true,
+            backend = 'nui',
+            relative = 'editor',
+            position = {
+              row = 8,
+              col = '50%',
+            },
+            size = {
+              width = 60,
+              height = 10,
+            },
+            border = {
+              style = 'rounded',
+              padding = { 0, 1 },
+            },
+            win_options = {
+              winhighlight = { Normal = 'Normal', FloatBorder = 'DiagnosticInfo' },
+            },
+          },
+        },
+      }
+    end,
   },
-  dependencies = {
-    -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-    "MunifTanjim/nui.nvim",
-    -- OPTIONAL:
-    --   `nvim-notify` is only needed, if you want to use the notification view.
-    --   If not available, we use `mini` as the fallback
-    "rcarriga/nvim-notify",
-    }
+  {
+    -- Install markdown preview, use npx if available.
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    ft = { 'markdown' },
+    build = function(plugin)
+      if vim.fn.executable 'npx' then
+        vim.cmd('!cd ' .. plugin.dir .. ' && cd app && npx --yes yarn install')
+      else
+        vim.cmd [[Lazy load markdown-preview.nvim]]
+        vim.fn['mkdp#util#install']()
+      end
+    end,
+    init = function()
+      if vim.fn.executable 'npx' then
+        vim.g.mkdp_filetypes = { 'markdown' }
+      end
+    end,
+  },
+  {
+    'folke/snacks.nvim',
+    priority = 1000,
+    lazy = false,
+    ---@type snacks.Config
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+      bigfile = { enabled = true },
+      dashboard = { enabled = true },
+      explorer = { enabled = true },
+      indent = { enabled = true },
+      input = { enabled = true },
+      picker = {
+        enabled = true,
+        -- sources = { -- this rigmarole just so that ctrl+b closes the explorer when it is open
+        --   explorer = {
+        --     win = {
+        --       list = {
+        --         keys = {
+        --           ['<c-b>'] = 'close',
+        --         },
+        --       },
+        --     },
+        --   },
+        -- },
+      },
+      notifier = { enabled = true },
+      quickfile = { enabled = true },
+      scope = { enabled = true },
+      scroll = { enabled = true },
+      statuscolumn = { enabled = true },
+      words = { enabled = true },
+      terminal = { enabled = true },
+      lazygit = { enabled = false },
+    },
+    keys = {
+      {
+        '<leader>fe',
+        function()
+          Snacks.explorer()
+        end,
+        desc = 'File [e]xplorer',
+      },
+      -- {
+      --   '<c-b>',
+      --   function()
+      --     Snacks.explorer()
+      --   end,
+      --   desc = 'open file explorer',
+      -- },
+      {
+        '<D-b>',
+        function()
+          Snacks.explorer()
+        end,
+        desc = 'open file explorer',
+      },
+      {
+        '<leader>ff',
+        function()
+          Snacks.picker.files()
+        end,
+        desc = 'find files in project directory',
+      },
+      {
+        '<leader>fs',
+        function()
+          Snacks.picker.smart()
+        end,
+        desc = 'find files in project directory',
+      },
+      {
+        '<leader>fg',
+        function()
+          Snacks.picker.grep()
+        end,
+        desc = 'find by grepping in project directory',
+      },
+      {
+        '<leader>fc',
+        function()
+          Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
+        end,
+        desc = 'find in neovim configuration',
+      },
+      {
+        '<leader>fh',
+        function()
+          Snacks.picker.help()
+          -- require('fzf-lua').helptags()
+        end,
+        desc = '[f]ind [h]elp',
+      },
+      {
+        '<leader>fk',
+        function()
+          Snacks.picker.keymaps()
+        end,
+        desc = '[f]ind [k]eymaps',
+      },
+      {
+        '<leader>fb',
+        function()
+          Snacks.picker.buffers()--require('fzf-lua').builtin()
+        end,
+        desc = '[f]ind [b]uiltin fzf',
+      },
+      {
+        '<leader>fw',
+        function()
+          require('fzf-lua').grep_cword()
+        end,
+        desc = '[f]ind current [w]ord',
+      },
+      {
+        '<leader>fd',
+        function()
+          Snacks.picker.diagnostics()
+          -- require('fzf-lua').diagnostics_document()
+        end,
+        desc = '[f]ind [d]iagnostics',
+      },
+      {
+        '<leader>fr',
+        function()
+          Snacks.picker.resume()
+        end,
+        desc = '[f]ind [r]esume',
+      },
+      {
+        '<leader>fo',
+        function()
+          require('fzf-lua').oldfiles()
+        end,
+        desc = '[f]ind [o]ld files',
+      },
+      {
+        '<leader><leader>',
+        function()
+          Snacks.picker.buffers()
+        end,
+        desc = '[,] find existing buffers',
+      },
+      {
+        '<leader>f/',
+        function()
+          Snacks.picker.lines()
+          -- require('fzf-lua').lgrep_curbuf()
+        end,
+        desc = '[/] live grep the current buffer',
+      },
+      {
+        '<leader>ft',
+        function()
+          Snacks.picker.colorschemes()
+        end,
+        desc = 'color [t]heme',
+      },
+      {
+        '<c-/>',
+        function()
+          Snacks.terminal()
+        end,
+        desc = 'Toggle Terminal',
+      },
+    },
   },
 }

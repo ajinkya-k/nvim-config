@@ -30,6 +30,9 @@ cmap('<C-a>', '<Home>')
 imap('<C-s>', '<esc>:update<cr><esc>')
 nmap('<C-s>', '<cmd>:update<cr><esc>')
 
+imap('<D-s>', '<esc>:update<cr><esc>')
+nmap('<D-s>', '<cmd>:update<cr><esc>')
+
 -- Move between windows using <ctrl> direction
 nmap('<C-j>', '<C-W>j')
 nmap('<C-k>', '<C-W>k')
@@ -312,19 +315,20 @@ wk.add({
     { "<leader>dt", group = "[t]est" },
     { "<leader>e", group = "[e]dit" },
     { "<leader>f", group = "[f]ind (telescope)" },
-    { "<leader>f<space>", "<cmd>Telescope buffers<cr>", desc = "[ ] buffers" },
-    { "<leader>fM", "<cmd>Telescope man_pages<cr>", desc = "[M]an pages" },
-    { "<leader>fb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "[b]uffer fuzzy find" },
-    { "<leader>fc", "<cmd>Telescope git_commits<cr>", desc = "git [c]ommits" },
-    { "<leader>fd", "<cmd>Telescope buffers<cr>", desc = "[d] buffers" },
-    { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "[f]iles" },
-    { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "[g]rep" },
-    { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "[h]elp" },
-    { "<leader>fj", "<cmd>Telescope jumplist<cr>", desc = "[j]umplist" },
-    { "<leader>fk", "<cmd>Telescope keymaps<cr>", desc = "[k]eymaps" },
-    { "<leader>fl", "<cmd>Telescope loclist<cr>", desc = "[l]oclist" },
-    { "<leader>fm", "<cmd>Telescope marks<cr>", desc = "[m]arks" },
-    { "<leader>fq", "<cmd>Telescope quickfix<cr>", desc = "[q]uickfix" },
+    --{ "<leader>f<space>", "<cmd>Telescope buffers<cr>", desc = "[ ] buffers" },
+    --{ "<leader>fM", "<cmd>Telescope man_pages<cr>", desc = "[M]an pages" },
+    --{ "<leader>fb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "[b]uffer fuzzy find" },
+    --{ "<leader>fc", "<cmd>Telescope git_commits<cr>", desc = "git [c]ommits" },
+    --{ "<leader>fd", "<cmd>Telescope buffers<cr>", desc = "[d] buffers" },
+    --{ "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "[f]iles" },
+    --{ "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "[g]rep" },
+    --{ "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "[h]elp" },
+    --{ "<leader>fj", "<cmd>Telescope jumplist<cr>", desc = "[j]umplist" },
+    --{ "<leader>fk", "<cmd>Telescope keymaps<cr>", desc = "[k]eymaps" },
+    --{ "<leader>fl", "<cmd>Telescope loclist<cr>", desc = "[l]oclist" },
+    --{ "<leader>fm", "<cmd>Telescope marks<cr>", desc = "[m]arks" },
+    --{ "<leader>fq", "<cmd>Telescope quickfix<cr>", desc = "[q]uickfix" },
+    --{ "<leader>fu", "<cmd>Telescope colorscheme<cr>", desc = "[u]i: colorscheme picker" },
     { "<leader>g", group = "[g]it" },
     { "<leader>gb", group = "[b]lame" },
     { "<leader>gbb", ":GitBlameToggle<cr>", desc = "[b]lame toggle virtual text" },
@@ -383,5 +387,14 @@ wk.add({
     { "<leader>vt", toggle_light_dark_theme, desc = "[t]oggle light/dark theme" },
     { "<leader>x", group = "e[x]ecute" },
     { "<leader>xx", ":w<cr>:source %<cr>", desc = "[x] source %" },
+    {"<leader>ta", ":$tabnew<CR>", desc = "new tab"},
+    { "<leader>tc", ":tabclose<CR>", desc = "close tab"}, 
+    {"<leader>to", ":tabonly<CR>", desc = "tabonly??"},
+    {"<leader>tn", ":tabn<CR>", desc = "next tab"},
+    {"<leader>tp", ":tabp<CR>", desc = "previous tab"},
+-- move current tab to previous position
+    {"<leader>tmp", ":-tabmove<CR>", desc = "move current tab to previous position"},
+-- move current tab to next position
+    {"<leader>tmn", ":+tabmove<CR>", desc = "move current tab to next position"},
   }
 }, { mode = 'n'})

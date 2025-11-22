@@ -1,23 +1,22 @@
-
 return {
 
-  {
-
-    -- for lsp features in code cells / embedded code
-    'jmbuhr/otter.nvim',
-    dev = false,
-    dependencies = {
-      {
-        'neovim/nvim-lspconfig',
-        'nvim-treesitter/nvim-treesitter',
-      },
-    },
-    opts = {
-      verbose = {
-        no_code_found = false,
-      }
-    },
-  },
+  -- {
+  --
+  --   -- for lsp features in code cells / embedded code
+  --   'jmbuhr/otter.nvim',
+  --   dev = false,
+  --   dependencies = {
+  --     {
+  --       'neovim/nvim-lspconfig',
+  --       'nvim-treesitter/nvim-treesitter',
+  --     },
+  --   },
+  --   opts = {
+  --     verbose = {
+  --       no_code_found = false,
+  --     },
+  --   },
+  -- },
 
   {
     'neovim/nvim-lspconfig',
@@ -25,6 +24,7 @@ return {
       { 'williamboman/mason.nvim' },
       { 'williamboman/mason-lspconfig.nvim' },
       { 'WhoIsSethDaniel/mason-tool-installer.nvim' },
+      { 'saghen/blink.cmp' },
       { -- nice loading notifications
         -- PERF: but can slow down startup
         'j-hui/fidget.nvim',
@@ -44,27 +44,18 @@ return {
           },
         },
         { 'Bilal2453/luvit-meta', lazy = true }, -- optional `vim.uv` typings
-        { -- optional completion source for require statements and module annotations
-          'hrsh7th/nvim-cmp',
-          opts = function(_, opts)
-            opts.sources = opts.sources or {}
-            table.insert(opts.sources, {
-              name = 'lazydev',
-              group_index = 0, -- set group index to 0 to skip loading LuaLS completions
-            })
-          end,
-        },
         -- { "folke/neodev.nvim", enabled = false }, -- make sure to uninstall or disable neodev.nvim
       },
       { 'folke/neoconf.nvim', opts = {}, enabled = false },
     },
     config = function()
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
       local lspconfig = require 'lspconfig'
       local util = require 'lspconfig.util'
 
       require('mason').setup()
       require('mason-lspconfig').setup {
-        automatic_installation = true,
+        automatic_enable = true,
       }
       require('mason-tool-installer').setup {
         ensure_installed = {
@@ -77,6 +68,7 @@ return {
         },
       }
 
+      lspconfig['lua_ls'].setup { capabilities = capabilities }
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -100,8 +92,12 @@ return {
           map('gh', vim.lsp.buf.signature_help, '[g]o to signature [h]elp')
           map('gI', vim.lsp.buf.implementation, '[g]o to [I]mplementation')
           map('gr', vim.lsp.buf.references, '[g]o to [r]eferences')
-          map('[d', function () vim.diagnostic.jump({count = 1}) end,'previous [d]iagnostic ')
-          map(']d', function () vim.diagnostic.jump({count = -1}) end, 'next [d]iagnostic ')
+          map('[d', function()
+            vim.diagnostic.jump { count = 1 }
+          end, 'previous [d]iagnostic ')
+          map(']d', function()
+            vim.diagnostic.jump { count = -1 }
+          end, 'next [d]iagnostic ')
           map('<leader>ll', vim.lsp.codelens.run, '[l]ens run')
           map('<leader>lR', vim.lsp.buf.rename, '[l]sp [R]ename')
           map('<leader>lf', vim.lsp.buf.format, '[l]sp [f]ormat')
@@ -115,11 +111,12 @@ return {
         debounce_text_changes = 150,
       }
 
-      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = require('misc.style').border })
-      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = require('misc.style').border })
-
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+      -- vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = require('misc.style').border })
+      -- vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = require('misc.style').border })
+      vim.lsp.buf.hover()
+      vim.lsp.buf.signature_help()
+      -- local capabilities = vim.lsp.protocol.make_client_capabilities()
+      -- old: capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
       capabilities.textDocument.completion.completionItem.snippetSupport = true
 
       -- also needs:
@@ -175,6 +172,34 @@ return {
       lspconfig.jsonls.setup {
         capabilities = capabilities,
         flags = lsp_flags,
+      }
+
+      lspconfig.zls.setup {
+        -- Server-specific settings. See `:help lspconfig-setup`
+
+        -- omit the following line if `zls` is in your PATH
+        cmd = { '~/Downloads/zls-macos-aarch64-0.14.0/zls' },
+        -- There are two ways to set config options:
+        --   - edit your `zls.json` that applies to any editor that uses ZLS
+        --   - set in-editor config options with the `settings` field below.
+        --
+        -- Further information on how to configure ZLS:
+        -- https://zigtools.org/zls/configure/
+        settings = {
+          zls = {
+            -- Whether to enable build-on-save diagnostics
+            --
+            -- Further information about build-on save:
+            -- https://zigtools.org/zls/guides/build-on-save/
+            -- enable_build_on_save = true,
+
+            -- Neovim already provides basic syntax highlighting
+            semantic_tokens = 'partial',
+
+            -- omit the following line if `zig` is in your PATH
+            zig_exe_path = '/path/to/zig_executable',
+          },
+        },
       }
 
       lspconfig.dotls.setup {
@@ -247,7 +272,6 @@ return {
         flags = lsp_flags,
       }
 
-
       lspconfig.julials.setup {
         capabilities = capabilities,
         flags = lsp_flags,
@@ -272,16 +296,16 @@ return {
       --   flags = lsp_flags,
       -- }
 
-      lspconfig.rust_analyzer.setup{
+      lspconfig.rust_analyzer.setup {
         capabilities = capabilities,
         settings = {
           ['rust-analyzer'] = {
             diagnostics = {
-              enable = false;
-            }
-          }
-        }
-     }
+              enable = false,
+            },
+          },
+        },
+      }
 
       -- lspconfig.ruff_lsp.setup {
       --   capabilities = capabilities,

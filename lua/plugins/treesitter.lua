@@ -15,8 +15,8 @@ return {
         ensure_installed = {
           'r',
           'python',
-          'markdown',
-          'markdown_inline',
+           --'markdown',
+          -- 'markdown_inline',
           'julia',
           'bash',
           'yaml',
@@ -24,7 +24,7 @@ return {
           'vim',
           'query',
           'vimdoc',
-          'latex', -- requires tree-sitter-cli (installed automatically via Mason)
+           -- 'latex', -- requires tree-sitter-cli (installed automatically via Mason)
           'html',
           'css',
           'dot',
@@ -35,7 +35,9 @@ return {
         },
         highlight = {
           enable = true,
-          additional_vim_regex_highlighting = false,
+          disable = { "latex" },
+		      additional_vim_regex_highlighting = { "latex", "markdown" },
+          -- additional_vim_regex_highlighting = false,
         },
         indent = {
           enable = true,
@@ -65,20 +67,20 @@ return {
             enable = true,
             set_jumps = true, -- whether to set jumps in the jumplist
             goto_next_start = {
-              [']m'] = '@function.outer',
-              [']]'] = '@class.inner',
+              ['<leader>]m'] = '@function.outer',
+              ['<leader>]]'] = '@class.inner',
             },
             goto_next_end = {
-              [']M'] = '@function.outer',
-              [']['] = '@class.outer',
+              ['<leader>]M'] = '@function.outer',
+              ['<leader>]['] = '@class.outer',
             },
             goto_previous_start = {
-              ['[m'] = '@function.outer',
-              ['[['] = '@class.inner',
+              ['<leader>[m'] = '@function.outer',
+              ['<leader>[['] = '@class.inner',
             },
             goto_previous_end = {
-              ['[M'] = '@function.outer',
-              ['[]'] = '@class.outer',
+              ['<leader>[M'] = '@function.outer',
+              ['<leader>[]'] = '@class.outer',
             },
           },
         },

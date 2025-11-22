@@ -66,7 +66,7 @@ return {
             elixir = 'exs',
             javascript = 'js',
             julia = 'jl',
-            latex = 'tex',
+            -- latex = 'tex',
             markdown = 'md',
             python = 'py',
             ruby = 'rb',
@@ -110,7 +110,7 @@ return {
 
   {
     'folke/flash.nvim',
-    enabled = false,
+    enabled = true,
     event = 'VeryLazy',
     opts = {
       modes = {

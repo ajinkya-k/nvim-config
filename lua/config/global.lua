@@ -17,6 +17,8 @@ vim.opt.mouse = 'a' -- enable mouse
 vim.opt.mousefocus = true
 vim.opt.clipboard:append 'unnamedplus' -- use system clipboard
 
+vim.o.cursorline = true
+vim.opt.wrap = true
 vim.opt.timeoutlen = 400 -- until which-key pops up
 vim.opt.updatetime = 250 -- for autocommands and hovers
 
@@ -105,12 +107,28 @@ vim.opt.scrolloff = 5
 -- (don't == 0) replace certain elements with prettier ones
 vim.opt.conceallevel = 0
 
+-- local icons = LazyVim.config.icons
 -- diagnostics
 vim.diagnostic.config {
   virtual_text = true,
   underline = true,
-  signs = true,
+  -- signs = true,
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '',
+      [vim.diagnostic.severity.WARN] = '',
+      [vim.diagnostic.severity.INFO] = '',
+      [vim.diagnostic.severity.HINT] = '',
+    },
+    linehl = {
+      [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
+    },
+    numhl = {
+      [vim.diagnostic.severity.WARN] = 'WarningMsg',
+    },
+  },
 }
+-- Default configuration
 
 -- add new filetypes
 vim.filetype.add {

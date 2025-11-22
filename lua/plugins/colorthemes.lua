@@ -1,12 +1,5 @@
 return {
-  { 
-    'shaunsingh/nord.nvim', 
-    enabled = false, lazy = false, priority = 1000,
-    config = function()
-      vim.cmd.colorscheme "nord"
-    end,
-   },
-  {
+   {
     'catppuccin/nvim',
     name = 'catppuccin',
     enabled = false,
@@ -58,15 +51,15 @@ return {
   {
     'projekt0n/github-nvim-theme',
     name = 'github-theme',
-    enabled = true,
+    enabled = false,
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
-    require('github-theme').setup({
-      -- ...
-    })
+      require('github-theme').setup({
+        -- ...
+      })
 
-    vim.cmd('colorscheme github_dark_dimmed')
+      vim.cmd('colorscheme github_dark_dimmed')
     end,
   },
   {
@@ -75,15 +68,8 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd("colorscheme onedark_vivid")
+      vim.cmd("colorscheme onedark_dark")
     end,
-  },
-
-  {
-    'neanias/everforest-nvim',
-    enabled = false,
-    lazy = false,
-    priority = 1000,
   },
 
   -- color html colors
