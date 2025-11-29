@@ -172,9 +172,9 @@ return {
           lualine_a = { 'mode', macro_recording },
           lualine_b = { 'branch', 'diff', 'diagnostics' },
           -- lualine_b = {},
-          lualine_c = { 'filename', 'searchcount' },
-          lualine_x = { 'filetype' },
-          lualine_y = { 'progress' },
+          lualine_c = { {'filename', path = 1}, 'searchcount' },
+          lualine_x = { 'diagnostics', 'selectioncount' },
+          lualine_y = { 'filetype' },
           lualine_z = { 'location' },
         },
         extensions = { 'nvim-tree' },
@@ -299,7 +299,7 @@ return {
     'akinsho/toggleterm.nvim',
     opts = {
       open_mapping = [[<c-\>]],
-      direction = 'float',
+      direction = 'horizontal',
     },
   },
 
